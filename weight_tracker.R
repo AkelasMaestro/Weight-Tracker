@@ -12,7 +12,7 @@ max_bmi <- 24.9
 
 ## get a list of all the file paths ##################################
 
-csv_files <- list.files("data", pattern = "*.csv", full.names = TRUE)
+csv_files <- list.files("data", pattern = "*weight.csv", full.names = TRUE)
 
 # debug tool: print the variables we currently have
 print("General Data")
