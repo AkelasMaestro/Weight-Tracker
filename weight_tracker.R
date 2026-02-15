@@ -43,7 +43,7 @@ process_and_plot <- function(file_path) {
 
   # Create start and end points for goal line
   # start_date is already defined
-  start_weight <- date %>% filter(date == start_date) %>% pull(weight)
+  start_weight <- data %>% filter(date == start_date) %>% pull(weight)
   end_date <- start_date + weeks * 7
   end_weight <- start_weight + goal * weeks
 
@@ -59,7 +59,7 @@ process_and_plot <- function(file_path) {
   low_buffer <- average - (average - min_weight) / 2
 
   # Start creating the plot
-  p <- ggplot(weight_data, aes(x = date, y = weight)) +
+  p <- ggplot(data, aes(x = date, y = weight)) +
     # Add shaded bands for weight zones
     # red shading for under weight
     annotate("rect", xmin = -Inf, xmax = Inf,
@@ -96,7 +96,7 @@ process_and_plot <- function(file_path) {
   ggsave(
     filename = paste0(start_date, "_", name,".png"),
     plot = p,
-    path = output,
+    path = "output",
     width = 6,
     height = 4,
     units = "in"
