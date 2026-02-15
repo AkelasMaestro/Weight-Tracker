@@ -14,6 +14,14 @@ max_bmi <- 24.9
 
 csv_files <- list.files("data", pattern = "*.csv", full.names = TRUE)
 
+# debug tool: print the variables we currently have
+print("General Data")
+print(paste0("Start date: ", as.character(start_date)))
+print(paste0("weeks:      ", weeks))
+print(paste0("Min BMI:    ", min_bmi))
+print(paste0("max BMI:    ", max_bmi))
+print(paste0("CSV files:  ", csv_files))
+
 ## Process each file found in data ###################################
 # This is where the main logic is handled.
 # First we define the function process_and_plot(). This is where most
@@ -22,15 +30,24 @@ csv_files <- list.files("data", pattern = "*.csv", full.names = TRUE)
 # applies process_and_plot() to each file found in the data folder.
 
 process_and_plot <- function(file_path) {  
-# read the individual's csv file into a tibble.
-  data <- read_csv(file_path)
-  
   # extract name, height, and weekly goal from the file name
-  file_name <- basename(file_path)
-  name_height_goal <- str_match(file_name, "(.*?)_(\\d+)_(\\d+\\.\\d+)\\.csv")
-  name <- name_height_goal[2]
-  height <- as.integer(name_height_goal[3])
-  goal <- as.numeric(name_height_goal[4])
+  file_name <- tools::file_path_sans_ext(basename(file_path))
+  name_elements <- unlist(str_split(file_name, "_"))
+  name <- name_elements[1]
+  height <- as.integer(name_elements[2])
+  goal <- as.numeric(name_elements[3])
+  
+  # read the individual's csv file into a tibble.
+  data <- read_csv(file_path, show_col_types = FALSE)
+  # show_col_types quiets the output.
+
+  # Debug messages
+  print(paste0("\n\n", "Individual Cases"))
+  print(paste0("file name: ", file_name))
+  print(paste0("Name:      ", name))
+  print(paste0("height:    ", height))
+  print(paste0("goal:      ", goal))
+  print(data)
 
   # Calculate minimum healthy weight based on height in inches
   min_weight <- (min_bmi * (height ^ 2)) / 703
