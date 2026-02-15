@@ -5,7 +5,7 @@ library(tidyverse) # handles the data manipulation
 
 ## Define variables ##################################################
 
-start_date <- as.Date("2026-02-08") + 7
+start_date <- as.Date("2023-01-01") + 7
 weeks <- 12 # represents the number of weeks we want to plot
 
 ## get a list of all the file paths ##################################
@@ -47,24 +47,26 @@ process_and_plot <- function(file_path) {
   end_date <- start_date + weeks * 7
 
   # total_days is needed to calculate the cumulative percentage of completion
-  total_days = end_date - start_date
+  total_days = as.numeric(end_date - start_date)
 
   # Take the boolean values from the csv, and calculate completion percentage
   data <- data %>%
     # make each row a single habit report with columns: date, habit, completed
-    pivot_longer(-date, names_to = "habit", values_to "completed") %>%
+    pivot_longer(-date, names_to = "Habits", values_to  = "completed") %>%
     # for each habit...
-    group_by(habit) %>%
+    group_by(Habits) %>%
     # make a new column called completion
     # calculate completion percentage for each habit up to that date.
-    mutate(completion = cumsum(completed) / total_days * 100) %>%
+    mutate(completion = cumsum(completed) / total_days) %>%
     ungroup()
  
  
   # Start creating the plot
-  p <- ggplot(data, aes(x = date, y = completion, color = habit)) +
+  p <- ggplot(data, aes(x = date, y = completion, color = Habits)) +
     geom_line(size = 1) +
-    labs(title = name, x = "Date", y = "Completion") +
+    scale_y_continuous(limits = c(0,1), labels = scales::percent) +
+    scale_x_date(limits = c(start_date, end_date)) +
+    labs(title = name, x = "Date", y = "Completion %") +
     theme_minimal()
 
   # Save the plot to the output folder
