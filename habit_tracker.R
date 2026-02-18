@@ -5,7 +5,7 @@ library(tidyverse) # handles the data manipulation
 
 ## Define variables ##################################################
 
-start_date <- as.Date("2023-01-01") + 7
+start_date <- as.Date("2026-02-16")
 weeks <- 12 # represents the number of weeks we want to plot
 
 ## get a list of all the file paths ##################################
@@ -63,7 +63,7 @@ process_and_plot <- function(file_path) {
  
   # Start creating the plot
   p <- ggplot(data, aes(x = date, y = completion, color = Habits)) +
-    geom_line(size = 1) +
+    geom_line(linewidth = 1) +
     scale_y_continuous(limits = c(0,1), labels = scales::percent) +
     scale_x_date(limits = c(start_date, end_date)) +
     labs(title = name, x = "Date", y = "Completion %") +
@@ -72,7 +72,7 @@ process_and_plot <- function(file_path) {
   # Save the plot to the output folder
   # name the file "{start_date}_{name}" 
   ggsave(
-    filename = paste0(start_date, "_", name,".png"),
+    filename = paste0(name,"_habits_",start_date, ".png"),
     plot = p,
     path = "output",
     width = 6,

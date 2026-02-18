@@ -111,7 +111,7 @@ process_and_plot <- function(file_path) {
   # Save the plot to the output folder
   # name the file "{start_date}_{name}" 
   ggsave(
-    filename = paste0(start_date, "_", name,".png"),
+    filename = paste0(name,"_weight_", start_date, ".png"),
     plot = p,
     path = "output",
     width = 6,
